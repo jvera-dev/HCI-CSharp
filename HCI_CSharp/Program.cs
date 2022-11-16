@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text;
+
 FileStream fs = new("Human.csv", FileMode.Open, FileAccess.Read);
 StreamReader sr = new(fs);
 List<string> people_training = new();
@@ -144,13 +146,81 @@ for(int i = 0; i < fields_uniqueVals["target"].Count; i++)
 }
 #endregion
 
+StringBuilder sb = new();
+sb.Clear();
+for(int j = 0; j < people_training.Count; j++)
+{
+    string[] words = people_training[j].Split(',');
+    words[0] = $"{ages_converted[words[0]]}";
+    words[1] = $"{employ_status_converted[words[1]]}";
+    words[2] = $"{income_converted[words[2]]}";
+    words[3] = $"{education_converted[words[3]]}";
+    words[4] = $"{number_converted[words[4]]}";
+    words[5] = $"{marital_status_converted[words[5]]}";
+    words[6] = $"{work_field_converted[words[6]]}";
+    words[7] = $"{family_status_converted[words[7]]}";
+    words[8] = $"{race_converted[words[8]]}";
+    words[9] = $"{gender_converted[words[9]]}";
+    words[10] = $"{num2_converted[words[10]]}";
+    words[11] = $"{num3_converted[words[11]]}";
+    words[12] = $"{num4_converted[words[12]]}";
+    words[13] = $"{country_converted[words[13]]}";
+    words[14] = $"{target_converted[words[14]]}";
+
+    for(int i = 0; i < words.Length; i++)
+    {
+        if (i != 14)
+            sb.Append(words[i] + ',');
+        else
+            sb.Append(words[i]);
+    }
+    people_training[j] = sb.ToString();
+    sb.Clear();
+}
+
+for(int j = 0; j < people_testing.Count; j++)
+{
+    string[] words = people_testing[j].Split(',');
+    words[0] = $"{ages_converted[words[0]]}";
+    words[1] = $"{employ_status_converted[words[1]]}";
+    words[2] = $"{income_converted[words[2]]}";
+    words[3] = $"{education_converted[words[3]]}";
+    words[4] = $"{number_converted[words[4]]}";
+    words[5] = $"{marital_status_converted[words[5]]}";
+    words[6] = $"{work_field_converted[words[6]]}";
+    words[7] = $"{family_status_converted[words[7]]}";
+    words[8] = $"{race_converted[words[8]]}";
+    words[9] = $"{gender_converted[words[9]]}";
+    words[10] = $"{num2_converted[words[10]]}";
+    words[11] = $"{num3_converted[words[11]]}";
+    words[12] = $"{num4_converted[words[12]]}";
+    words[13] = $"{country_converted[words[13]]}";
+    words[14] = $"{target_converted[words[14]]}";
+
+    for(int i = 0; i < words.Length; i++)
+    {
+        if (i != 14)
+            sb.Append(words[i] + ',');
+        else
+            sb.Append(words[i]);
+    }
+    people_testing[j] = sb.ToString();
+    sb.Clear();
+}
+
+/***********************************************************
+ * 
+ * put the rest of the code here
+ *  
+ * need to do all the math
+ */
+
 return 0;
 
-//for( int i = 0; i < 10; i++)
-//{
-//    Console.WriteLine($"training line: {people_training[i]}\ntesting line: {people_testing[i]}\n\n");
-//}
 
+
+
+//some functions
 void pop_unique(string line)
 {
     string[] words = line.Split(',');
