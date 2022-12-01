@@ -353,7 +353,7 @@ List<double> prob_based_on_num4_over = new();
 List<double> prob_based_on_num4_under = new(); foreach (var item in num4_converted) { prob_based_on_num4_over.Add(0); prob_based_on_num4_under.Add(0); }
 List<double> prob_based_on_country_over = new();
 List<double> prob_based_on_country_under = new(); foreach (var item in country_converted) { prob_based_on_country_over.Add(0); prob_based_on_country_under.Add(0); }
-#endregion
+
 
 for (int i = 0; i < age_occurrence_under.Count; i++)
 {
@@ -425,7 +425,7 @@ for (int i = 0; i < country_occurrence_under.Count; i++)
     prob_based_on_country_under[i] = country_occurrence_under[i] / target_occurrence[0];
     prob_based_on_country_over[i] = country_occurrence_over[i] / target_occurrence[1];
 }
-
+#endregion
 
 for (int j = 0; j < people_testing.Count; j++)
 {
@@ -457,6 +457,151 @@ for (int j = 0; j < people_testing.Count; j++)
     sb.Clear();
 }
 
+/********************************************************/
+/********************************************************/
+/********************************************************/
+/********************************************************/
+/********************************************************/
+
+#region reset occur counts
+//just using "over" cause we only need one and to save mem, maybe
+for(int i = 0; i < ages_converted.Count; i++)
+{
+    age_occurrence_over[i] = 0;
+}
+for (int i = 0; i < employ_status_converted.Count; i++)
+{
+    employ_status_occurrence_over[i] = 0;
+}
+for (int i = 0; i < income_converted.Count; i++)
+{
+    income_occurrence_over[i] = 0;
+}
+for (int i = 0; i < education_converted.Count; i++)
+{
+    education_occurrence_over[i] = 0;
+}
+for (int i = 0; i < number_converted.Count; i++)
+{
+    number_occurrence_over[i] = 0;
+}
+for (int i = 0; i < marital_status_converted.Count; i++)
+{
+    marital_status_occurrence_over[i] = 0;
+}
+for (int i = 0; i < work_field_converted.Count; i++)
+{
+    work_field_occurrence_over[i] = 0;
+}
+for (int i = 0; i < family_status_converted.Count; i++)
+{
+    family_status_occurrence_over[i] = 0;
+}
+for (int i = 0; i < race_converted.Count; i++)
+{
+    race_occurrence_over[i] = 0;
+}
+for (int i = 0; i < gender_converted.Count; i++)
+{
+    gender_occurrence_over[i] = 0;
+}
+for (int i = 0; i < num2_converted.Count; i++)
+{
+    num2_occurrence_over[i] = 0;
+}
+for (int i = 0; i < num3_converted.Count; i++)
+{
+    num3_occurrence_over[i] = 0;
+}
+for (int i = 0; i < num4_converted.Count; i++)
+{
+    num4_occurrence_over[i] = 0;
+}
+for (int i = 0; i < country_converted.Count; i++)
+{
+    country_occurrence_over[i] = 0;
+}
+#endregion
+
+//count occurrences in testing batch
+for (int i = 0; i < people_testing.Count; i++)
+{
+    string[] words = people_testing[i].Split(',');
+        countOccur(age_occurrence_over, words[0]);
+        countOccur(employ_status_occurrence_over, words[1]);
+        countOccur(income_occurrence_over, words[2]);
+        countOccur(education_occurrence_over, words[3]);
+        countOccur(number_occurrence_over, words[4]);
+        countOccur(marital_status_occurrence_over, words[5]);
+        countOccur(work_field_occurrence_over, words[6]);
+        countOccur(family_status_occurrence_over, words[7]);
+        countOccur(race_occurrence_over, words[8]);
+        countOccur(gender_occurrence_over, words[9]);
+        countOccur(num2_occurrence_over, words[10]);
+        countOccur(num3_occurrence_over, words[11]);
+        countOccur(num4_occurrence_over, words[12]);
+        countOccur(country_occurrence_over, words[13]);
+}
+
+double total = -1d / (double)people_testing.Count;
+double sum_under, sum_over, temp_over, temp_under;
+double acc=0;
+
+//Calculate Entropy!!!
+for (int i = 0; i < people_testing.Count; i++)
+{
+    string[] words = people_testing[i].Split(',');
+    sum_under = age_occurrence_over[int.Parse(words[0])] * checkCalc(Math.Log2(prob_based_on_age_under[int.Parse(words[0])]))
+            + employ_status_occurrence_over[int.Parse(words[1])] * checkCalc(Math.Log2(prob_based_on_employ_under[int.Parse(words[1])]))
+            + income_occurrence_over[int.Parse(words[2])]  * checkCalc(Math.Log2(prob_based_on_income_under[int.Parse(words[2])]))
+            + education_occurrence_over[int.Parse(words[3])] * checkCalc(Math.Log2(prob_based_on_edu_under[int.Parse(words[3])]))
+            + number_occurrence_over[int.Parse(words[4])] * checkCalc(Math.Log2(prob_based_on_num_under[int.Parse(words[4])]))
+            + marital_status_occurrence_over[int.Parse(words[5])] * checkCalc(Math.Log2(prob_based_on_marry_under[int.Parse(words[5])]))
+            + work_field_occurrence_over[int.Parse(words[6])] * checkCalc(Math.Log2(prob_based_on_work_under[int.Parse(words[6])]))
+            + family_status_occurrence_over[int.Parse(words[7])] * checkCalc(Math.Log2(prob_based_on_fam_under[int.Parse(words[7])]))
+            + race_occurrence_over[int.Parse(words[8])] * checkCalc(Math.Log2(prob_based_on_race_under[int.Parse(words[8])]))
+            + gender_occurrence_over[int.Parse(words[9])] * checkCalc(Math.Log2(prob_based_on_gender_under[int.Parse(words[9])]))
+            + num2_occurrence_over[int.Parse(words[10])] * checkCalc(Math.Log2(prob_based_on_num2_under[int.Parse(words[10])]))
+            + num3_occurrence_over[int.Parse(words[11])] * checkCalc(Math.Log2(prob_based_on_num3_under[int.Parse(words[11])]))
+            + num4_occurrence_over[int.Parse(words[12])] * checkCalc(Math.Log2(prob_based_on_num4_under[int.Parse(words[12])]))
+            + country_occurrence_over[int.Parse(words[13])] * checkCalc(Math.Log2(prob_based_on_country_under[int.Parse(words[13])]));
+
+    sum_over = age_occurrence_over[int.Parse(words[0])] * checkCalc(Math.Log2(prob_based_on_age_over[int.Parse(words[0])]))
+            + employ_status_occurrence_over[int.Parse(words[1])] * checkCalc(Math.Log2(prob_based_on_employ_over[int.Parse(words[1])]))
+            + income_occurrence_over[int.Parse(words[2])]  * checkCalc(Math.Log2(prob_based_on_income_over[int.Parse(words[2])]))
+            + education_occurrence_over[int.Parse(words[3])] * checkCalc(Math.Log2(prob_based_on_edu_over[int.Parse(words[3])]))
+            + number_occurrence_over[int.Parse(words[4])] * checkCalc(Math.Log2(prob_based_on_num_over[int.Parse(words[4])]))
+            + marital_status_occurrence_over[int.Parse(words[5])] * checkCalc(Math.Log2(prob_based_on_marry_over[int.Parse(words[5])]))
+            + work_field_occurrence_over[int.Parse(words[6])] * checkCalc(Math.Log2(prob_based_on_work_over[int.Parse(words[6])]))
+            + family_status_occurrence_over[int.Parse(words[7])] * checkCalc(Math.Log2(prob_based_on_fam_over[int.Parse(words[7])]))
+            + race_occurrence_over[int.Parse(words[8])] * checkCalc(Math.Log2(prob_based_on_race_over[int.Parse(words[8])]))
+            + gender_occurrence_over[int.Parse(words[9])] * checkCalc(Math.Log2(prob_based_on_gender_over[int.Parse(words[9])]))
+            + num2_occurrence_over[int.Parse(words[10])] * checkCalc(Math.Log2(prob_based_on_num2_over[int.Parse(words[10])]))
+            + num3_occurrence_over[int.Parse(words[11])] * checkCalc(Math.Log2(prob_based_on_num3_over[int.Parse(words[11])]))
+            + num4_occurrence_over[int.Parse(words[12])] * checkCalc(Math.Log2(prob_based_on_num4_over[int.Parse(words[12])]))
+            + country_occurrence_over[int.Parse(words[13])] * checkCalc(Math.Log2(prob_based_on_country_over[int.Parse(words[13])]));
+
+    temp_over = sum_over * total;
+    temp_under = sum_under * total;
+    if(temp_under < temp_over)
+    {
+        if (words[14] == "0")
+            acc++;
+    }
+    else
+    {
+        if (words[14] == "1")
+            acc++;
+    }
+}
+
+acc = acc / people_testing.Count;
+
+Console.WriteLine(acc);
+
+
+
+
 
 //some functions
 void pop_unique(string line)
@@ -487,4 +632,14 @@ bool checkUnique(List<string> list, string target)
 void countOccur(List<double> occurrance, string target)
 {
     occurrance[int.Parse(target)]++;
+}
+
+double checkCalc(double ans)
+{
+    if (double.IsNegativeInfinity(ans))
+        ans = -5;
+    else if (double.IsPositiveInfinity(ans))
+        ans = 5;
+
+    return ans;
 }
