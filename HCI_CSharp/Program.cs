@@ -4,7 +4,6 @@ using System.Text;
 
 FileStream fs = new("Human.csv", FileMode.Open, FileAccess.Read);
 StreamReader sr = new(fs);
-List<string> all_people = new List<string>();
 List<string> people_training = new();
 List<string> people_testing = new();
 string? line;
@@ -55,8 +54,6 @@ while ((line = sr.ReadLine()) != null)
 
     //populate unique dictionary
     pop_unique(line);
-
-    all_people.Add(line);
 
     if (random.NextDouble() < .7)
     {
